@@ -282,6 +282,21 @@ SELECT * FROM post WHERE post.id IN (123,456,567,9098,8904);
 
 如果指定了 DELAY_KEY_WRITE 选项，在每次修改执行完成时，不会立即将修改的索引数据写入磁盘，而是会写到内存中的键缓冲区，只有在清理键缓冲区或者关闭表的时候才会将对应的索引块写入磁盘。这种方式可以极大的提升写入性能，但是在数据库或者主机崩溃时会造成索引损坏，需要执行修复操作。
 
+## 四个标准隔离
+ 数据库事务的隔离级别有4个。由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable。这四个级别能够逐个解决脏读、不可反复读、幻读这几类问题。MySql设置的隔离级别默觉得Repeatable Read。可反复读级别。
+
+隔离级别能够配置。
+
+
+     √: 可能出现    ×: 不会出现
+	             脏读 	不可反复读 	幻读
+Read uncommitted 	√ 	    √ 	     √
+Read committed 	× 	    √ 	     √
+Repeatable read 	× 	    × 	     √
+Serializable 	   × 	    × 	     ×
+
+ 
+
 ## 比较
 
 - 事务：InnoDB 是事务型的，可以使用 Commit 和 Rollback 语句。
